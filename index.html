@@ -1,0 +1,221 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<script>
+function downloadCanvas(){
+	document.getElementById("clickableDownload").addEventListener("click", function() {
+    
+    html2canvas(document.querySelector('#wavybg-wrapper')).then(function(canvas) {
+
+		var constantFilename = 'RandomNFT'+getRandomInt(1,99999)+'.png';
+
+        saveAs(canvas.toDataURL(), constantFilename);
+    });
+});
+
+function saveAs(uri, filename) {
+
+    var link = document.createElement('a');
+
+    if (typeof link.download === 'string') {
+
+        link.href = uri;
+        link.download = filename;
+
+        //Firefox requires the link to be in the body
+        document.body.appendChild(link);
+
+        //simulate click
+        link.click();
+
+        //remove the link when done
+        document.body.removeChild(link);
+
+    } else {
+
+        window.open(uri);
+
+    }
+}
+}
+
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+</script>
+<script>
+	function getRandomColor() {
+  var letters = '0123456789ABCDEF';
+  var color = '#';
+  for (var i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+function getRandomInt(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min) + min); //The maximum is exclusive and the minimum is inclusive
+}
+
+
+function getLightColor() {
+                var letters = 'BCDEF'.split('');
+                var color = '#';
+                for (var i = 0; i < 6; i++ ) {
+                    color += letters[Math.floor(Math.random() * letters.length)];
+                }
+                return color;
+            }
+
+function getDarkColor() {
+    var color = '#';
+    for (var i = 0; i < 6; i++) {
+        color += Math.floor(Math.random() * 10);
+    }
+    return color;
+}
+
+function setRandomColors() {
+	//generate colors
+	var startcolor = getDarkColor();
+	var endcolor = getDarkColor();
+	document.getElementById("gradientStart").value = startcolor;
+	document.getElementById("gradientEnd").value = endcolor;
+	var outercolor = getLightColor();
+	var innercolor = getRandomColor();
+	var rnd1 = getRandomInt(0,1);
+	
+	if (rnd1 == 1) {
+		innercolor = "#FFFFFF";
+	} 
+	innercolor = "#FFFFFF";
+	console.log("-------------------------------");
+	console.log("Outer Color:"+outercolor);
+	console.log("Inner Color:"+innercolor);
+	document.getElementById("bgColorOuter").value = outercolor;
+	document.getElementById("bgColorInner").value = innercolor;
+	//generate Options
+	var opacity = getRandomInt(7,25);
+	document.getElementById("smokeOpacity").value = opacity; //setSmokeOpacity
+	console.log("Opacity: "+opacity+"%");
+	document.getElementById("opacitySlider").textContent = opacity+"%"; //setSmokeOpacity Slider
+	var radius = getRandomInt(50,70);
+	document.getElementById("radiusSize").value = radius; //setRadiusSize
+	document.getElementById("radiusSlider").textContent = radius+"%"; //setRadiusSize Slider
+	console.log("Radius: "+radius+"%");
+	var line =  getRandomInt(0,1)+"."+getRandomInt(2,9);
+	document.getElementById("lineWidth").value = line; //setLineWidth
+	document.getElementById("widthSlider").textContent = line+"px"; //setLineWidth Slider
+	console.log("Line Width: "+line+"px");
+
+
+	var circles = getRandomInt(2,3);
+	document.getElementById("numCircles").value = circles; //setSmokesAmount
+	document.getElementById("smokesSlider").textContent = circles; //setSmokesAmount Slider
+	console.log("Smoke Circles: "+circles);
+
+	// click generate
+	document.getElementById("clickableGenerate").click();
+
+
+
+}
+
+</script>
+
+
+<script src="lib/modernizr-2.7.2.js"></script>
+<script src="https://html2canvas.hertzen.com/dist/html2canvas.js" type="text/javascript"></script> 
+
+<title>Smoky Backgrounds Generator - waterpipe.js</title>
+<link rel="stylesheet" href="css/colpick.css">
+<link rel="stylesheet" href="css/jquery.nouislider.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body onload="setRandomColors()">
+
+
+
+	<center>
+		<a>
+
+<div id="wavybg-wrapper" style="width: 999px; height: 999px"> 
+	<canvas>Your browser does not support HTML5 canvas.</canvas>
+</div>
+</a>
+</center>
+<div class="sidebar-wrapper">
+	
+	<div style="clear:both"></div>
+	<div class="generator-form-wrap">
+		<form class="generator-params">
+			<h2>Smoke style</h2>
+			<div class="input-group">
+				<label for="gradientStart">Gradient start:</label>
+				<input id="gradientStart" name="gradientStart"  type="color" value="#ff0000">
+			</div>
+			<div class="input-group">
+				<label for="gradientEnd">Gradient end:</label>
+				<input type="color" id="gradientEnd" name="gradientEnd" value="#222222"></input>
+			</div>
+			<div class="input-group">
+				<label for="smokeOpacity">Opacity: <span id="opacitySlider" class="value">10%</span></label>
+				<input type="hidden" id="smokeOpacity" name="smokeOpacity" value="10" class="slider"></input>
+			</div>
+			<div class="input-group">
+				<label for="radiusSize">Smoke size: <span id="radiusSlider" class="value">100%</span></label>
+				<input type="hidden" id="radiusSize" name="radiusSize" value="100" class=""></input>
+			</div>
+			<div class="input-group">
+				<label for="lineWidth">Line width: <span id="widthSlider" class="value">2px</span></label>
+				<input type="hidden" id="lineWidth" name="lineWidth" value="2" class=""></input>
+			</div>
+			<div class="input-group">
+				<label for="numCircles">Smokes #: <span id="smokesSlider" class="value">1</span></label>
+				<input type="hidden" id="numCircles" name="numCircles" value="1" class=""></input>
+			</div>
+			<h2>Background style</h2>
+			<div class="input-group">
+				<label for="bgColorOuter">Outer color:</label>
+				<input type="color" id="bgColorOuter" name="bgColorOuter" value="#666666"></input>
+			</div>
+			<div class="input-group">
+				<label for="bgColorInner">Inner color:</label>
+				<input type="color" id="bgColorInner" name="bgColorInner" value="#ffffff"></input>
+				
+		</form>
+	</div>
+	<script>
+		setInterval(function(){ 
+		document.getElementById("clickableDownload").click();
+		document.getElementById("clickableDownload").click();
+	
+	}, 5000);
+	</script>
+
+<script>
+	setInterval(function(){ 
+	location.reload();
+
+}, 6000);
+</script>
+	<div style="clear:both"></div>
+	<div class="buttons-wrap">
+		<div  class="btn btn-grey btn-generate" id="clickableGenerate">Generate</div>
+		<button onclick="downloadCanvas()" id="clickableDownload" type="button">Download</button>
+	</div>
+</div>
+<script src="lib/jquery-1.11.0.min.js"></script>
+<script src="lib/colpick.js"></script>
+<script src="lib/jquery.nouislider.min.js"></script>
+<script src="lib/jquery.nicescroll.min.js"></script>
+<script src="lib/builder_scripts.js"></script>
+
+<script src="waterpipe.js"></script>
+
+</body>
+</html>
